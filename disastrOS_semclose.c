@@ -19,7 +19,7 @@ void internal_semClose(){
 		return;
 	}
 
-	descr = (SemDescriptor*) List_detach(&running->descriptors,(ListItem*) descr);
+	descr = (SemDescriptor*) List_detach(&running->sem_descriptors,(ListItem*) descr);
 	
 	assert(descr);
 

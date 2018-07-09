@@ -3,7 +3,7 @@
 #include <poll.h>
 #include "disastrOS.h"
 
-#define QUANTI 50
+#define QUANTI 2
 #define PRODUTTORI 2
 // we need this to handle the sleep state
 void sleeperFunction(void* args){
@@ -29,7 +29,7 @@ void childFunction(void* args){
  /*-------------------------------------------------------*/
 	printf("1-I am opening the semaphores...!!!\n");
 	int prod_fd = disastrOS_semopen(1,PRODUTTORI);
-	int cons_fd = disastrOS_semopen(PRODUTTORI,0);
+	int cons_fd = disastrOS_semopen(2,0);
 	
 	printf("2-Semahores opened\n");
 
@@ -48,13 +48,18 @@ void childFunction(void* args){
 			disastrOS_sempost(prod_fd);
 		}
 	}
-	
+	disastrOS_sleep(20);
   printf("PID: %d, terminating\n", disastrOS_getpid());
+	
+	
+	disastrOS_printStatus();
 
-  for (int i=0; i<(disastrOS_getpid()+1); ++i){
+  /*for (int i=0; i<(disastrOS_getpid()+1); ++i){
     printf("PID: %d, iterate %d\n", disastrOS_getpid(), i);
     disastrOS_sleep((20-disastrOS_getpid())*5);
-  }
+  }*/
+	disastrOS_semclose(prod_fd);
+	disastrOS_semclose(cons_fd);
   disastrOS_exit(disastrOS_getpid()+1);
 }
 

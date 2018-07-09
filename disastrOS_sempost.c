@@ -36,7 +36,7 @@ void internal_semPost(){
 	//Incremento semaforo
 	sem->count = (sem->count+1);
 
-	if(sem->count >= 0){
+	if(sem->count <= 0){
 
 		List_detach(&sem->waiting_descriptors,(ListItem*) descr);
 		List_insert(&sem->descriptors,sem->descriptors.last,(ListItem*)descr);	

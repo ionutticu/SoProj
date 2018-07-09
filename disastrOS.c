@@ -316,6 +316,19 @@ int disastrOS_semopen(int resource_id,int count) {
 	return disastrOS_syscall(DSOS_CALL_SEMOPEN, resource_id, count);
 }
 
+int disastrOS_semclose(int fd) {
+	return disastrOS_syscall(DSOS_CALL_SEMCLOSE, fd);
+}
+
+int disastrOS_semwait(int fd) {
+	return disastrOS_syscall(DSOS_CALL_SEMWAIT, fd);
+}
+
+int disastrOS_sempost(int fd) {
+	return disastrOS_syscall(DSOS_CALL_SEMPOST, fd);
+}
+
+
 
 void disastrOS_printStatus(){
   printf("****************** DisastrOS ******************\n");
