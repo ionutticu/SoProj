@@ -11,4 +11,5 @@ void internal_semOpen(){
 	//Prendo gli argomenti dal processo che chiamerà sem_open
 	int resource_id = running->syscall_args[0];
 	int count = running->syscall_args[1];
+  // do stuff :)
 }
