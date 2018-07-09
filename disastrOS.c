@@ -146,6 +146,11 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   Timer_init();
   Resource_init();
   Descriptor_init();
+
+	//Aggiunte,spero compili
+	
+	Semaphore_init();
+	SemDescriptor_init();
   init_pcb=0;
 
   // populate the vector of syscalls and number of arguments for each syscall
@@ -183,8 +188,10 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   syscall_numarg[DSOS_CALL_SHUTDOWN]      = 0;
 
   // fill these with the syscall handlers
+	//1)resource_id 2)count
   syscall_vector[DSOS_CALL_SEMOPEN]      = internal_semOpen;
-  syscall_numarg[DSOS_CALL_SEMOPEN]      = 1;
+  syscall_numarg[DSOS_CALL_SEMOPEN]      = 2;
+	
 
   syscall_vector[DSOS_CALL_SEMCLOSE]      = internal_semClose;
   syscall_numarg[DSOS_CALL_SEMCLOSE]      = 1;
@@ -305,6 +312,9 @@ int disastrOS_destroyResource(int resource_id) {
   return disastrOS_syscall(DSOS_CALL_DESTROY_RESOURCE, resource_id);
 }
 
+int disastrOS_semopen(int resource_id,int count) {
+	return disastrOS_syscall(DSOS_CALL_SEMOPEN, resource_id, count);
+}
 
 
 void disastrOS_printStatus(){

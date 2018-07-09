@@ -62,13 +62,4 @@ void internal_semOpen(){
 	running->syscall_retvalue = descr -> fd;
 	return;	
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}
+

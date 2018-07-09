@@ -14,6 +14,8 @@ extern ListHead waiting_list; // list of the waiting processes
 extern ListHead zombie_list;  // zombies
 extern ListHead resources_list; // resources
 
+extern ListHead semaphores_list; //Ecco perche dp non funzionava
+
 extern ListHead timer_list;     //timers (concrete)
 extern volatile int disastrOS_time; //global time of disastrOS
 
