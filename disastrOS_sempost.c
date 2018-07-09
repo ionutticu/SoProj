@@ -33,7 +33,7 @@ void internal_semPost(){
 	}
 
 
-	//Incremento semafor
+	//Incremento semaforo
 	sem->count = (sem->count+1);
 
 	if(sem->count >= 0){

@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <poll.h>
-
 #include "disastrOS.h"
 
+#define QUANTI 50
+#define PRODUTTORI 2
 // we need this to handle the sleep state
 void sleeperFunction(void* args){
   printf("Hello, I am the sleeper, and I sleep %d\n",disastrOS_getpid());
@@ -20,6 +21,34 @@ void childFunction(void* args){
   int mode=0;
   int fd=disastrOS_openResource(disastrOS_getpid(),type,mode);
   printf("fd=%d\n", fd);
+
+	int i;
+	
+
+
+ /*-------------------------------------------------------*/
+	printf("1-I am opening the semaphores...!!!\n");
+	int prod_fd = disastrOS_semopen(1,PRODUTTORI);
+	int cons_fd = disastrOS_semopen(PRODUTTORI,0);
+	
+	printf("2-Semahores opened\n");
+
+	//Produco
+	if(disastrOS_getpid() == 4){
+		for(i=0;i<QUANTI;i++){
+			disastrOS_semwait(cons_fd);
+			printf("Produco\n");
+			disastrOS_sempost(prod_fd);
+		}
+	}
+	if(disastrOS_getpid() == 3){
+		for(i=0;i<QUANTI;i++){
+			disastrOS_semwait(cons_fd);
+			printf("Consumo\n");
+			disastrOS_sempost(prod_fd);
+		}
+	}
+	
   printf("PID: %d, terminating\n", disastrOS_getpid());
 
   for (int i=0; i<(disastrOS_getpid()+1); ++i){
