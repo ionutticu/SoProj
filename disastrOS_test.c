@@ -3,7 +3,7 @@
 #include <poll.h>
 #include "disastrOS.h"
 
-#define QUANTI 2
+#define QUANTI 20
 #define PRODUTTORI 2
 // we need this to handle the sleep state
 void sleeperFunction(void* args){
@@ -36,9 +36,9 @@ void childFunction(void* args){
 	//Produco
 	if(disastrOS_getpid() == 4){
 		for(i=0;i<QUANTI;i++){
-			disastrOS_semwait(cons_fd);
+			disastrOS_semwait(prod_fd);
 			printf("Produco\n");
-			disastrOS_sempost(prod_fd);
+			disastrOS_sempost(cons_fd);
 		}
 	}
 	if(disastrOS_getpid() == 3){
@@ -60,6 +60,9 @@ void childFunction(void* args){
   }*/
 	disastrOS_semclose(prod_fd);
 	disastrOS_semclose(cons_fd);
+
+	disastrOS_printStatus();
+
   disastrOS_exit(disastrOS_getpid()+1);
 }
 

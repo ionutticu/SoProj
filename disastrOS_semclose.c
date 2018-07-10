@@ -19,7 +19,7 @@ void internal_semClose(){
 		return;
 	}
 
-	descr = (SemDescriptor*) List_detach(&running->sem_descriptors,(ListItem*) descr);
+	List_detach(&running->sem_descriptors,(ListItem*) descr);
 	
 	assert(descr);
 
@@ -30,6 +30,11 @@ void internal_semClose(){
 	SemDescriptorPtr* descrptr = (SemDescriptorPtr*) List_detach(& sem->descriptors,(ListItem*)descr->ptr);
 
 	assert(descrptr);
+	//Aggiunta alla fine
+	if(sem->descriptors.size == 0 && sem->waiting_descriptors.size == 0){
+		List_detach(&semaphores_list,(ListItem*) sem);
+		Semaphore_free(sem);
+	}
 
 	SemDescriptor_free(descr);
 	SemDescriptorPtr_free(descrptr);
