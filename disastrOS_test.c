@@ -59,6 +59,7 @@ void childFunction(void* args){
     disastrOS_sleep((20-disastrOS_getpid())*5);
   }*/
 	disastrOS_semclose(prod_fd);
+	printf("CiaoCiao");
 	disastrOS_semclose(cons_fd);
 
 	disastrOS_printStatus();

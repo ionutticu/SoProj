@@ -42,5 +42,7 @@ void internal_semClose(){
 	//Tutto ok,posso tornare
 
 	running->syscall_retvalue = 0;
+	//Vabbe per un ret cristo
+	return;
   
 }
