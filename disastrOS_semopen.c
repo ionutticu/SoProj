@@ -18,7 +18,10 @@ void internal_semOpen(){
 	//Vediamo se per caso questo semaforo non esiste già...
 	Semaphore* sem = SemaphoreList_byId(&semaphores_list,resource_id);
 	
-	//L'ho trovato?Esiste?Boh
+	if(count<0){
+  	running->syscall_retvalue = DSOS_ESEMAPHOREOPEN;
+  	return;
+		}
 	
 	if(!sem) {
 		//Alloco
@@ -46,8 +49,6 @@ void internal_semOpen(){
 	
 	SemDescriptorPtr* descrptr = SemDescriptorPtr_alloc(descr);
 	
-	//Problemini??
-	
 	if(!descrptr){
 		running->syscall_retvalue = DSOS_ESEMAPHORENODESCPTR;
 		return;
@@ -58,7 +59,6 @@ void internal_semOpen(){
 	List_insert(&sem->descriptors,sem->descriptors.last,(ListItem*) descrptr);
 	
 	//Ritorno,dovrei aver fatto tutto
-	
 	running->syscall_retvalue = descr -> fd;
 	return;	
 }

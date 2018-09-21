@@ -18,13 +18,6 @@ void internal_semPost(){
 		return;
 	}
 	
-	SemDescriptorPtr* descrptr = descr->ptr;
-
-	if(!descrptr){
-		running->syscall_retvalue = DSOS_ESEMAPHORENODESCPTR;
-		return;	
-	}
-
 	Semaphore* sem = descr->semaphore;
 	
 	if(!sem){
@@ -36,17 +29,15 @@ void internal_semPost(){
 	//Incremento semaforo
 	sem->count = (sem->count+1);
 
+	SemDescriptorPtr* proc_desptr;
+
 	if(sem->count <= 0){
-
-		List_detach(&sem->waiting_descriptors,(ListItem*) descr);
-		List_insert(&sem->descriptors,sem->descriptors.last,(ListItem*)descr);	
-
-		//Tolgo dalla waiting list il processo bloccato dal sem,descrptr->pcb
-		//Lo inserisco in ready list
-		
-
-		List_detach(&waiting_list,(ListItem*) descr->pcb);
-		List_insert(&ready_list,ready_list.last,(ListItem*) descr->pcb);
+		List_insert(&ready_list,ready_list.last,(ListItem*) running);
+    proc_desptr = (SemDescriptorPtr*) List_detach(&sem->waiting_descriptors, (ListItem*) sem->waiting_descriptors.first);
+    List_insert(&sem->descriptors, sem->descriptors.last, (ListItem*) proc_desptr);
+    List_detach(&waiting_list, (ListItem*) proc_desptr->descriptor->pcb);
+    running->status = Ready;
+    running = proc_desptr->descriptor->pcb;
 	}
 	
 	running->syscall_retvalue = 0;

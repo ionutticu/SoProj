@@ -147,7 +147,7 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   Resource_init();
   Descriptor_init();
 
-	//Aggiunte,spero compili
+	//Aggiunte
 	
 	Semaphore_init();
 	SemDescriptor_init();

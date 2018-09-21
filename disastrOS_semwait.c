@@ -28,6 +28,7 @@ void internal_semWait(){
 
 	if(!sem){
 		running->syscall_retvalue = DSOS_ESEMAPHOREPROBLEM;
+		return;
 	}
 	
 	sem->count = (sem->count -1);
@@ -38,9 +39,9 @@ void internal_semWait(){
 		//Boh, funzionerà cosi?
 		List_detach(&sem->descriptors,(ListItem*) descrptr);
 		List_insert(&sem->waiting_descriptors,sem->waiting_descriptors.last,(ListItem*) descr->ptr);
-
-		//Switch processi
 		List_insert(&waiting_list,waiting_list.last,(ListItem*) running);
+		running->status=Waiting;
+		//Switch processi
 		processo = (PCB*) List_detach(&ready_list,(ListItem*) ready_list.first);
 		running = (PCB*) processo;
 	

@@ -20,29 +20,28 @@ void internal_semClose(){
 	}
 
 	List_detach(&running->sem_descriptors,(ListItem*) descr);
-	
-	assert(descr);
 
 	//Bene qui viene il bello
 
 	Semaphore* sem = descr->semaphore;
 
+	if(!sem){
+		running->return_value = DSOS_ESEMAPHOREPROBLEM;
+		return;
+	}
+
 	SemDescriptorPtr* descrptr = (SemDescriptorPtr*) List_detach(& sem->descriptors,(ListItem*)descr->ptr);
 
-	assert(descrptr);
 	//Aggiunta alla fine
 	if(sem->descriptors.size == 0 && sem->waiting_descriptors.size == 0){
 		List_detach(&semaphores_list,(ListItem*) sem);
 		Semaphore_free(sem);
 	}
-
+	
 	SemDescriptor_free(descr);
 	SemDescriptorPtr_free(descrptr);
-	
-	//Tutto ok,posso tornare
-
 	running->syscall_retvalue = 0;
-	//Vabbe per un ret cristo
+
 	return;
   
 }
