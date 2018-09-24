@@ -31,7 +31,7 @@ void internal_semPost(){
 
 	SemDescriptorPtr* proc_desptr;
 
-	if(sem->count <= 0){
+	if(sem->count == 0){
 		List_insert(&ready_list,ready_list.last,(ListItem*) running);
     proc_desptr = (SemDescriptorPtr*) List_detach(&sem->waiting_descriptors, (ListItem*) sem->waiting_descriptors.first);
     List_insert(&sem->descriptors, sem->descriptors.last, (ListItem*) proc_desptr);
@@ -40,7 +40,7 @@ void internal_semPost(){
     running = proc_desptr->descriptor->pcb;
 	}
 	
-	running->syscall_retvalue = 0;
+	running->syscall_retvalue = sem->count;
 	return;
 }
 
